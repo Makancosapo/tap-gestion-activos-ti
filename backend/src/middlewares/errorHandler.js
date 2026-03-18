@@ -3,7 +3,7 @@ function errorHandler(err, req, res, next) {
 
     res.status(500).json({
         ok: false,
-        message: 'Error interno del servidor'
+        message: err.message || 'Error interno del servidor'
     })
 }
 

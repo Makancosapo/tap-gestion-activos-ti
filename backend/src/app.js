@@ -1,6 +1,13 @@
 const express = require('express')
 const cors = require('cors')
 const inventarioRoutes = require('./routes/inventario.routes')
+const dashboardRoutes = require('./routes/dashboard.routes')
+const movimientosRoutes = require('./routes/movimientos.routes')
+const errorHandler = require('./middlewares/errorHandler')
+const productosRoutes = require('./routes/productos.routes')
+const equiposRoutes = require('./routes/equipos.routes')
+const reportesRoutes = require('./routes/reportes.routes')
+
 
 const app = express()
 
@@ -15,5 +22,11 @@ app.get('/', (req, res) => {
 })
 
 app.use('/api/inventario', inventarioRoutes)
+app.use('/api/dashboard', dashboardRoutes)
+app.use('/api/movimientos', movimientosRoutes)
+app.use('/api/productos', productosRoutes)
+app.use('/api/equipos', equiposRoutes)
+app.use('/api/reportes', reportesRoutes)
+app.use(errorHandler)
 
 module.exports = app
