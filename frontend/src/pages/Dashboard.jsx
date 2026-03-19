@@ -1,54 +1,155 @@
 import { useEffect, useState } from "react";
-import { getResumenDashboard, getMovimientosRecientes } from "../services/dashboard.service";
+import {
+    getResumenDashboard,
+    getMovimientosRecientes,
+} from "../services/dashboard.service";
+import "../styles/dashboard.css";
 
 function Dashboard() {
     const [resumen, setResumen] = useState(null);
     const [movimientos, setMovimientos] = useState([]);
     const [error, setError] = useState("");
+    const [cargando, setCargando] = useState(false);
 
     useEffect(() => {
-        async function cargarDatos() {
-            try {
-                const resumenData = await getResumenDashboard();
-                const movimientosData = await getMovimientosRecientes();
-
-                setResumen(resumenData.data);
-                setMovimientos(movimientosData.data);
-            } catch (err) {
-                setError("No se pudieron cargar los datos del dashboard");
-                console.error(err);
-            }
-        }
-
-        cargarDatos();
+        cargarDashboard();
     }, []);
 
+    async function cargarDashboard() {
+        try {
+            setCargando(true);
+            setError("");
+
+            const [resumenRes, movimientosRes] = await Promise.all([
+                getResumenDashboard(),
+                getMovimientosRecientes(),
+            ]);
+
+            setResumen(resumenRes.data || null);
+            setMovimientos(movimientosRes.data || []);
+        } catch (err) {
+            console.error(err);
+            setError("No se pudieron cargar los datos del dashboard");
+        } finally {
+            setCargando(false);
+        }
+    }
+
+    function formatearFecha(fecha) {
+        if (!fecha) return "-";
+        return new Date(fecha).toLocaleString("es-CL");
+    }
+
+    function getTipoClase(tipo) {
+        switch (tipo) {
+            case "Asignacion":
+                return "tipo asignacion";
+            case "Devolucion":
+                return "tipo devolucion";
+            case "Mantenimiento":
+                return "tipo mantenimiento";
+            case "Salida Mantenimiento":
+                return "tipo salida";
+            case "Baja":
+                return "tipo baja";
+            case "Entrada":
+                return "tipo entrada";
+            default:
+                return "tipo";
+        }
+    }
+
     return (
-        <section>
-            <h2>Dashboard</h2>
-            <p>Resumen general del sistema.</p>
+        <section className="dashboard-page">
+            <div className="dashboard-header">
+                <h2>Dashboard</h2>
+                <p>Resumen general del sistema de gestión de activos TI.</p>
+            </div>
 
-            {error && <p>{error}</p>}
+            {error && <p className="dashboard-alert error">{error}</p>}
 
-            {resumen && (
-                <div>
-                    <p>Total equipos: {resumen.total_equipos}</p>
-                    <p>Asignados: {resumen.asignados}</p>
-                    <p>Disponibles: {resumen.disponibles}</p>
-                    <p>Mantenimiento: {resumen.mantenimiento}</p>
-                    <p>Baja: {resumen.baja}</p>
-                </div>
+            {cargando ? (
+                <p className="dashboard-loading">Cargando dashboard...</p>
+            ) : (
+                <>
+                    {resumen && (
+                        <div className="dashboard-resumen">
+                            <div className="dashboard-card">
+                                <span>Total equipos</span>
+                                <strong>{resumen.total_equipos}</strong>
+                            </div>
+
+                            <div className="dashboard-card asignado">
+                                <span>Asignados</span>
+                                <strong>{resumen.asignados}</strong>
+                            </div>
+
+                            <div className="dashboard-card disponible">
+                                <span>Disponibles</span>
+                                <strong>{resumen.disponibles}</strong>
+                            </div>
+
+                            <div className="dashboard-card mantenimiento">
+                                <span>Mantenimiento</span>
+                                <strong>{resumen.mantenimiento}</strong>
+                            </div>
+
+                            <div className="dashboard-card baja">
+                                <span>Baja</span>
+                                <strong>{resumen.baja}</strong>
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="dashboard-panel">
+                        <div className="dashboard-panel-header">
+                            <h3>Movimientos recientes</h3>
+                            <p>Últimos registros realizados en el sistema.</p>
+                        </div>
+
+                        <div className="dashboard-tabla-wrapper">
+                            <table className="dashboard-tabla">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Código</th>
+                                        <th>Producto</th>
+                                        <th>Tipo</th>
+                                        <th>Registrado por</th>
+                                        <th>Destino</th>
+                                        <th>Motivo</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {movimientos.length > 0 ? (
+                                        movimientos.map((mov) => (
+                                            <tr key={mov.id_movimiento}>
+                                                <td>{formatearFecha(mov.fecha_movimiento)}</td>
+                                                <td>{mov.codigo_interno}</td>
+                                                <td>{mov.nombre_producto}</td>
+                                                <td>
+                                                    <span className={getTipoClase(mov.tipo_movimiento)}>
+                                                        {mov.tipo_movimiento}
+                                                    </span>
+                                                </td>
+                                                <td>{mov.registrado_por}</td>
+                                                <td>{mov.trabajador_destino || "No aplica"}</td>
+                                                <td>{mov.motivo || "-"}</td>
+                                            </tr>
+                                        ))
+                                    ) : (
+                                        <tr>
+                                            <td colSpan="7" className="dashboard-vacio">
+                                                No hay movimientos recientes.
+                                            </td>
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </>
             )}
-
-            <h3>Movimientos recientes</h3>
-
-            <ul>
-                {movimientos.map((mov) => (
-                    <li key={mov.id_movimiento}>
-                        {new Date(mov.fecha_movimiento).toLocaleString("es-CL")} - {mov.codigo_interno} - {mov.tipo_movimiento}
-                    </li>
-                ))}
-            </ul>
         </section>
     );
 }

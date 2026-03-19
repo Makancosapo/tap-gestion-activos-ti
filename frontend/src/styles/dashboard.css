@@ -1,0 +1,174 @@
+.dashboard-page {
+    width: 100%;
+}
+
+.dashboard-header {
+    margin-bottom: 20px;
+}
+
+.dashboard-header h2 {
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+.dashboard-header p {
+    color: #4b5563;
+}
+
+.dashboard-alert {
+    padding: 12px 14px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-size: 14px;
+}
+
+.dashboard-alert.error {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.dashboard-loading {
+    color: #374151;
+}
+
+.dashboard-resumen {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+}
+
+.dashboard-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.dashboard-card span {
+    display: block;
+    color: #6b7280;
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+
+.dashboard-card strong {
+    font-size: 26px;
+    color: #111827;
+}
+
+.dashboard-card.asignado {
+    border-left: 5px solid #2563eb;
+}
+
+.dashboard-card.disponible {
+    border-left: 5px solid #16a34a;
+}
+
+.dashboard-card.mantenimiento {
+    border-left: 5px solid #d97706;
+}
+
+.dashboard-card.baja {
+    border-left: 5px solid #dc2626;
+}
+
+.dashboard-panel {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.dashboard-panel-header {
+    margin-bottom: 16px;
+}
+
+.dashboard-panel-header h3 {
+    margin-bottom: 6px;
+    font-size: 20px;
+}
+
+.dashboard-panel-header p {
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.dashboard-tabla-wrapper {
+    overflow-x: auto;
+}
+
+.dashboard-tabla {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.dashboard-tabla thead {
+    background: #f3f4f6;
+}
+
+.dashboard-tabla th,
+.dashboard-tabla td {
+    padding: 14px 12px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 14px;
+    vertical-align: top;
+}
+
+.dashboard-tabla th {
+    color: #111827;
+    font-weight: 600;
+}
+
+.dashboard-tabla td {
+    color: #374151;
+}
+
+.dashboard-tabla tbody tr:hover {
+    background: #f9fafb;
+}
+
+.dashboard-vacio {
+    text-align: center;
+    padding: 24px;
+    color: #6b7280;
+}
+
+.tipo {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.tipo.asignacion {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.tipo.devolucion {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.tipo.mantenimiento {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.tipo.salida {
+    background: #e0f2fe;
+    color: #0369a1;
+}
+
+.tipo.baja {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.tipo.entrada {
+    background: #ede9fe;
+    color: #6d28d9;
+}

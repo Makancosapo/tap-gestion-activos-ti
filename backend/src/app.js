@@ -7,7 +7,7 @@ const errorHandler = require('./middlewares/errorHandler')
 const productosRoutes = require('./routes/productos.routes')
 const equiposRoutes = require('./routes/equipos.routes')
 const reportesRoutes = require('./routes/reportes.routes')
-
+const trabajadoresRoutes = require('./routes/trabajadores.routes')
 
 const app = express()
 
@@ -28,5 +28,6 @@ app.use('/api/productos', productosRoutes)
 app.use('/api/equipos', equiposRoutes)
 app.use('/api/reportes', reportesRoutes)
 app.use(errorHandler)
+app.use('/api/trabajadores', trabajadoresRoutes)
 
 module.exports = app

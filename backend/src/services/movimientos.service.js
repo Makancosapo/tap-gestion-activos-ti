@@ -1,5 +1,19 @@
 const { getConnection, sql } = require('../config/db')
 
+async function obtenerTiposMovimiento() {
+  const pool = await getConnection()
+
+  const result = await pool.request().query(`
+    SELECT
+      id_tipo_movimiento,
+      descripcion_tipo
+    FROM tipo_movimiento
+    ORDER BY id_tipo_movimiento
+  `)
+
+  return result.recordset
+}
+
 async function crearMovimiento(data) {
   const pool = await getConnection()
 
@@ -89,6 +103,7 @@ async function obtenerHistorialPorEquipo(idEquipo) {
 }
 
 module.exports = {
+  obtenerTiposMovimiento,
   crearMovimiento,
   obtenerHistorialPorEquipo
 }

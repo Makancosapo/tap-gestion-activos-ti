@@ -1,5 +1,18 @@
 const movimientosService = require('../services/movimientos.service')
 
+async function obtenerTiposMovimiento(req, res, next) {
+    try {
+        const data = await movimientosService.obtenerTiposMovimiento()
+
+        res.json({
+            ok: true,
+            data
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
 async function registrarMovimiento(req, res, next) {
     try {
         const {
@@ -60,6 +73,7 @@ async function obtenerHistorialPorEquipo(req, res, next) {
 }
 
 module.exports = {
+    obtenerTiposMovimiento,
     registrarMovimiento,
     obtenerHistorialPorEquipo
 }

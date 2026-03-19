@@ -5,6 +5,7 @@ import Inventario from "./pages/Inventario";
 import Productos from "./pages/Productos";
 import Equipos from "./pages/Equipos";
 import Movimientos from "./pages/Movimientos";
+import HistorialEquipo from "./pages/HistorialEquipo";
 import Reportes from "./pages/Reportes";
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
           <Route path="productos" element={<Productos />} />
           <Route path="equipos" element={<Equipos />} />
           <Route path="movimientos" element={<Movimientos />} />
+          <Route path="movimientos/historial/:id" element={<HistorialEquipo />} />
           <Route path="reportes" element={<Reportes />} />
         </Route>
       </Routes>
