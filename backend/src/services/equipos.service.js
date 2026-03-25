@@ -1,9 +1,21 @@
 const { getConnection, sql } = require('../config/db')
 
-async function obtenerEquipos() {
-    const pool = await getConnection()
+function generarSiguienteCodigo(ultimoCodigo) {
+  if (!ultimoCodigo) {
+    return 'TI-0001'
+  }
 
-    const result = await pool.request().query(`
+  const partes = ultimoCodigo.split('-')
+  const numeroActual = parseInt(partes[1], 10)
+  const siguienteNumero = numeroActual + 1
+
+  return `TI-${String(siguienteNumero).padStart(4, '0')}`
+}
+
+async function obtenerEquipos() {
+  const pool = await getConnection()
+
+  const result = await pool.request().query(`
     SELECT
       e.id_equipo,
       e.codigo_interno,
@@ -16,7 +28,8 @@ async function obtenerEquipos() {
       p.modelo,
       cp.nombre_categoria AS categoria,
       ee.id_estado_equipo,
-      ee.descripcion_estado AS estado
+      ee.descripcion_estado AS estado,
+      CONCAT(t.nombre, ' ', t.apellido) AS empleado_asignado
     FROM equipo e
     INNER JOIN producto p
       ON e.id_producto = p.id_producto
@@ -24,19 +37,23 @@ async function obtenerEquipos() {
       ON p.id_categoria = cp.id_categoria
     INNER JOIN estado_equipo ee
       ON e.id_estado_equipo = ee.id_estado_equipo
+    LEFT JOIN asignacion_actual aa
+      ON e.id_equipo = aa.id_equipo
+    LEFT JOIN trabajador t
+      ON aa.id_trabajador = t.id_trabajador
     ORDER BY e.id_equipo
   `)
 
-    return result.recordset
+  return result.recordset
 }
 
 async function obtenerEquipoPorId(idEquipo) {
-    const pool = await getConnection()
+  const pool = await getConnection()
 
-    const result = await pool
-        .request()
-        .input('idEquipo', sql.Int, idEquipo)
-        .query(`
+  const result = await pool
+    .request()
+    .input('idEquipo', sql.Int, idEquipo)
+    .query(`
       SELECT
         e.id_equipo,
         e.codigo_interno,
@@ -50,7 +67,8 @@ async function obtenerEquipoPorId(idEquipo) {
         p.modelo,
         cp.nombre_categoria AS categoria,
         ee.id_estado_equipo,
-        ee.descripcion_estado AS estado
+        ee.descripcion_estado AS estado,
+        CONCAT(t.nombre, ' ', t.apellido) AS empleado_asignado
       FROM equipo e
       INNER JOIN producto p
         ON e.id_producto = p.id_producto
@@ -58,24 +76,37 @@ async function obtenerEquipoPorId(idEquipo) {
         ON p.id_categoria = cp.id_categoria
       INNER JOIN estado_equipo ee
         ON e.id_estado_equipo = ee.id_estado_equipo
+      LEFT JOIN asignacion_actual aa
+        ON e.id_equipo = aa.id_equipo
+      LEFT JOIN trabajador t
+        ON aa.id_trabajador = t.id_trabajador
       WHERE e.id_equipo = @idEquipo
     `)
 
-    return result.recordset[0] || null
+  return result.recordset[0] || null
 }
 
 async function crearEquipo(data) {
-    const pool = await getConnection()
+  const pool = await getConnection()
 
-    await pool
-        .request()
-        .input('id_producto', sql.Int, data.id_producto)
-        .input('numero_serie', sql.VarChar(100), data.numero_serie)
-        .input('codigo_interno', sql.VarChar(100), data.codigo_interno)
-        .input('fecha_ingreso', sql.Date, data.fecha_ingreso)
-        .input('id_estado_equipo', sql.Int, data.id_estado_equipo)
-        .input('observacion', sql.VarChar(255), data.observacion ?? null)
-        .query(`
+  const ultimoCodigoResult = await pool.request().query(`
+      SELECT TOP 1 codigo_interno
+      FROM equipo
+      ORDER BY id_equipo DESC
+    `)
+
+  const ultimoCodigo = ultimoCodigoResult.recordset[0]?.codigo_interno || null
+  const nuevoCodigo = generarSiguienteCodigo(ultimoCodigo)
+
+  await pool
+    .request()
+    .input('id_producto', sql.Int, data.id_producto)
+    .input('numero_serie', sql.VarChar(100), data.numero_serie)
+    .input('codigo_interno', sql.VarChar(100), nuevoCodigo)
+    .input('fecha_ingreso', sql.Date, data.fecha_ingreso)
+    .input('id_estado_equipo', sql.Int, 1)
+    .input('observacion', sql.VarChar(255), data.observacion ?? null)
+    .query(`
       INSERT INTO equipo (
         id_producto,
         numero_serie,
@@ -94,10 +125,10 @@ async function crearEquipo(data) {
       )
     `)
 
-    const result = await pool
-        .request()
-        .input('codigo_interno', sql.VarChar(100), data.codigo_interno)
-        .query(`
+  const result = await pool
+    .request()
+    .input('codigo_interno', sql.VarChar(100), nuevoCodigo)
+    .query(`
       SELECT TOP 1
         e.id_equipo,
         e.id_producto,
@@ -111,11 +142,11 @@ async function crearEquipo(data) {
       ORDER BY e.id_equipo DESC
     `)
 
-    return result.recordset[0]
+  return result.recordset[0]
 }
 
 module.exports = {
-    obtenerEquipos,
-    obtenerEquipoPorId,
-    crearEquipo
+  obtenerEquipos,
+  obtenerEquipoPorId,
+  crearEquipo
 }

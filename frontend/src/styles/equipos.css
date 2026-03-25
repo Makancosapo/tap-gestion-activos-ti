@@ -1,0 +1,178 @@
+.equipos-page {
+    width: 100%;
+}
+
+.equipos-header {
+    margin-bottom: 20px;
+}
+
+.equipos-header h2 {
+    font-size: 28px;
+    margin-bottom: 8px;
+}
+
+.equipos-header p {
+    color: #4b5563;
+}
+
+.equipos-alert {
+    padding: 12px 14px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-size: 14px;
+}
+
+.equipos-alert.success {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.equipos-alert.error {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.equipos-layout {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 20px;
+}
+
+.equipos-form,
+.equipos-panel {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.equipos-form h3,
+.equipos-panel h3 {
+    margin-bottom: 16px;
+}
+
+.equipos-field {
+    margin-bottom: 14px;
+}
+
+.equipos-field label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+.equipos-field input,
+.equipos-field select,
+.equipos-toolbar input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: #ffffff;
+}
+
+.equipos-submit {
+    width: 100%;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    background: #2563eb;
+    color: #ffffff;
+    cursor: pointer;
+}
+
+.equipos-submit:hover {
+    background: #1d4ed8;
+}
+
+.equipos-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.equipos-toolbar input {
+    max-width: 240px;
+}
+
+.equipos-tabla-wrapper {
+    overflow-x: auto;
+}
+
+.equipos-tabla {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.equipos-tabla thead {
+    background: #f3f4f6;
+}
+
+.equipos-tabla th,
+.equipos-tabla td {
+    padding: 14px 12px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 14px;
+}
+
+.equipos-tabla tbody tr:hover {
+    background: #f9fafb;
+}
+
+.equipos-vacio {
+    text-align: center;
+    color: #6b7280;
+    padding: 24px;
+}
+
+.equipos-loading {
+    color: #374151;
+}
+
+.estado {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.estado.disponible {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.estado.asignado {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.estado.mantenimiento {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.estado.baja {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.equipos-info {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 16px;
+}
+
+.equipos-info p {
+    margin-bottom: 6px;
+    color: #374151;
+}
+
+.equipos-info p:last-child {
+    margin-bottom: 0;
+}

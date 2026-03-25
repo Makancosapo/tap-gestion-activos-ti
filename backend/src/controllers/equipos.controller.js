@@ -39,25 +39,21 @@ async function crearEquipo(req, res, next) {
         const {
             id_producto,
             numero_serie,
-            codigo_interno,
             fecha_ingreso,
-            id_estado_equipo,
             observacion
         } = req.body
 
-        if (!id_producto || !numero_serie || !codigo_interno || !fecha_ingreso || !id_estado_equipo) {
+        if (!id_producto || !numero_serie || !fecha_ingreso) {
             return res.status(400).json({
                 ok: false,
-                message: 'id_producto, numero_serie, codigo_interno, fecha_ingreso e id_estado_equipo son obligatorios'
+                message: 'id_producto, numero_serie y fecha_ingreso son obligatorios'
             })
         }
 
         const data = await equiposService.crearEquipo({
             id_producto,
             numero_serie,
-            codigo_interno,
             fecha_ingreso,
-            id_estado_equipo,
             observacion
         })
 
